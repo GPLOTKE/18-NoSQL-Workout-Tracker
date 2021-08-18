@@ -5,13 +5,21 @@ router.get("/", (req, res) => {
     db.Workout.find({}).then(dbWorkout => {
         dbWorkout.forEach(workout => {
             let total = 0;
-            workout.exercises.forEach(e => {
-                total += e.duration;
+            workout.exercises.forEach(exercise => {
+                total += exercise.duration;
             });
             workout.totalDuration = total;
         });
         res.json(dbWorkout);
     }).catch(err => {
+        res.json(err);
+    });
+});
+
+router.post("/", (req, res) => {
+    db.Workout.create(req.body).then((dbWorkout => {
+        res.json(dbWorkout);
+    })).catch(err => {
         res.json(err);
     });
 });
